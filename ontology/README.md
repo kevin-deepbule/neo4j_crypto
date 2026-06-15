@@ -63,7 +63,7 @@ ReportField
 2. 每个被测系统建立一个 `System` 节点。
 3. 资产、密码应用、人员、文档等实例节点必须归属于某个 `System` 或 `Report`。
 4. 密码算法、密码用途、安全需求、安全威胁、密码产品类型、数据类别和测评指标作为全局字典节点复用。
-5. 同一个实体可使用多标签，例如加密网关可同时是 `CryptoProduct` 和 `NetworkDevice`。
+5. 同一个实体可使用多标签，例如加密网关可同时是 `CryptoProduct` 和 `NetworkDevice`，加密服务器可同时是 `CryptoProduct` 和 `Server`。
 6. 每个节点保留来源章节、来源文本和抽取置信度，便于校验与回溯。
 7. 为避免同义标签重复建模，使用 `System`、`Server`、`DatabaseSystem`、`ImportantData` 分别表示候选类型 `TargetSystem`、`ServerDevice`、`Database`、`DataAsset`。
 8. `ReportSection`、`ReportField` 仅在需要保留完整报告结构和精确溯源时创建；核心业务关系直接连接领域实体。
