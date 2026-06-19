@@ -166,3 +166,49 @@ NEO4J_BOLT_PORT=7687
 ```
 
 非本地环境请修改 `NEO4J_PASSWORD`。
+
+## 图谱查询 API
+
+本仓库提供一个轻量 FastAPI 服务，用于把 Neo4j 图谱内容以稳定 JSON 返回给后续 report 智能体。
+
+### 安装依赖
+
+```bash
+uv sync --extra test
+```
+
+### 启动 API
+
+先启动 Neo4j 并加载样例数据：
+
+```bash
+sudo scripts/neo4j.sh up
+sudo scripts/load_sample_data.sh
+```
+
+再启动查询服务：
+
+```bash
+uv run uvicorn crypto_kg_api.main:app --host 0.0.0.0 --port 8000
+```
+
+默认读取以下环境变量，未设置时使用本地 Neo4j 默认值：
+
+```text
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=crypto_neo4j_password
+NEO4J_DATABASE=neo4j
+```
+
+### 常用接口
+
+```bash
+curl http://localhost:8000/api/v1/health
+curl http://localhost:8000/api/v1/ready
+curl http://localhost:8000/api/v1/systems/sys_gov_service/overview
+curl http://localhost:8000/api/v1/systems/sys_gov_service/assets
+curl http://localhost:8000/api/v1/reports/rpt_20260610_gov_service/generation-context
+```
+
+`generation-context` 是后续接入 report 智能体的主接口，只返回图中已有事实，不根据名称或文本猜测缺失关系。
