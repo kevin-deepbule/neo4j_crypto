@@ -128,6 +128,64 @@ MATCH (item:ComplianceItem)
 MATCH (criterion:EvaluationCriterion {code: item.criterion_code})
 MERGE (item)-[:BASED_ON]->(criterion);
 
+// Rule-based relationships from explicit extraction fields.
+// Placeholder values are ignored here and handled by data quality checks.
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (product:CryptoProduct)
+UNWIND coalesce(product.algorithm_names, []) +
+  CASE WHEN product.algorithm_name IS NULL THEN [] ELSE [product.algorithm_name] END AS raw_algorithm
+WITH product, trim(toString(raw_algorithm)) AS algorithm_name, placeholders
+WHERE NOT algorithm_name IN placeholders
+MATCH (algorithm:CryptoAlgorithm {name: algorithm_name})
+MERGE (product)-[:USES_ALGORITHM]->(algorithm);
+
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (app:CryptoApplication)
+UNWIND coalesce(app.algorithm_names, []) +
+  CASE WHEN app.algorithm_name IS NULL THEN [] ELSE [app.algorithm_name] END AS raw_algorithm
+WITH app, trim(toString(raw_algorithm)) AS algorithm_name, placeholders
+WHERE NOT algorithm_name IN placeholders
+MATCH (algorithm:CryptoAlgorithm {name: algorithm_name})
+MERGE (app)-[:USES_ALGORITHM]->(algorithm);
+
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (service:CryptoService)
+UNWIND coalesce(service.algorithm_names, []) +
+  CASE WHEN service.algorithm_name IS NULL THEN [] ELSE [service.algorithm_name] END AS raw_algorithm
+WITH service, trim(toString(raw_algorithm)) AS algorithm_name, placeholders
+WHERE NOT algorithm_name IN placeholders
+MATCH (algorithm:CryptoAlgorithm {name: algorithm_name})
+MERGE (service)-[:USES_ALGORITHM]->(algorithm);
+
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (data:ImportantData)
+UNWIND coalesce(data.business_application_ids, []) +
+  CASE WHEN data.business_application_id IS NULL THEN [] ELSE [data.business_application_id] END AS raw_app_id
+WITH data, trim(toString(raw_app_id)) AS app_id, placeholders
+WHERE NOT app_id IN placeholders
+MATCH (app:BusinessApplication {id: app_id})
+MERGE (data)-[:BELONGS_TO]->(app);
+
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (data:ImportantData)
+UNWIND coalesce(data.server_ids, []) +
+  CASE WHEN data.server_id IS NULL THEN [] ELSE [data.server_id] END AS raw_server_id
+WITH data, trim(toString(raw_server_id)) AS server_id, placeholders
+WHERE NOT server_id IN placeholders
+MATCH (server:Server {id: server_id})
+MERGE (data)-[:STORED_ON]->(server);
+
+WITH ["未明确", "未提供", "XX", "N/A", "NA", "无", ""] AS placeholders
+MATCH (data:ImportantData)
+UNWIND coalesce(data.database_system_ids, []) +
+  coalesce(data.database_ids, []) +
+  CASE WHEN data.database_system_id IS NULL THEN [] ELSE [data.database_system_id] END +
+  CASE WHEN data.database_id IS NULL THEN [] ELSE [data.database_id] END AS raw_database_id
+WITH data, trim(toString(raw_database_id)) AS database_id, placeholders
+WHERE NOT database_id IN placeholders
+MATCH (database:DatabaseSystem {id: database_id})
+MERGE (data)-[:STORED_IN]->(database);
+
 // Execution summary.
 MATCH ()-[relationship]->()
 RETURN type(relationship) AS relationship_type, count(*) AS count

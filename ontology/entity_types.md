@@ -118,6 +118,8 @@
 | `importance_level` | string | 重要程度 |
 | `product_type` | string | 密码产品类型便捷值，应与关联的 `ProductType.name` 一致 |
 | `product_type_code` | string | 关联的全局密码产品类型编码 |
+| `algorithm_name` | string | 明确抽取的单个算法名称，可用于自动创建 `USES_ALGORITHM` |
+| `algorithm_names` | list<string> | 明确抽取的算法名称列表，可用于自动创建 `USES_ALGORITHM` |
 | `asset_type` | string | 资产类型枚举值 |
 | `is_certified` | boolean | 是否具备认证证书 |
 
@@ -201,6 +203,14 @@
 | `description` | string | 数据描述 |
 | `data_type` | string | 数据类别便捷值，应与关联的 `DataCategory.name` 一致 |
 | `data_category_code` | string | 关联的全局数据类别编码 |
+| `business_application_id` | string | 明确抽取的所属业务应用 ID，可用于自动创建 `BELONGS_TO` |
+| `business_application_ids` | list<string> | 明确抽取的所属业务应用 ID 列表，可用于自动创建 `BELONGS_TO` |
+| `server_id` | string | 明确抽取的存储服务器 ID，可用于自动创建 `STORED_ON` |
+| `server_ids` | list<string> | 明确抽取的存储服务器 ID 列表，可用于自动创建 `STORED_ON` |
+| `database_system_id` | string | 明确抽取的存储数据库 ID，可用于自动创建 `STORED_IN` |
+| `database_system_ids` | list<string> | 明确抽取的存储数据库 ID 列表，可用于自动创建 `STORED_IN` |
+| `database_id` | string | `database_system_id` 的兼容字段 |
+| `database_ids` | list<string> | `database_system_ids` 的兼容字段 |
 | `storage_location` | string | 存储位置 |
 | `security_needs` | list<string> | 安全需求 |
 | `importance_level` | string | 重要程度 |
@@ -276,6 +286,8 @@
 | `provider` | string | 服务提供商 |
 | `service_type` | string | 电子印章、时间戳、CA 等 |
 | `purpose` | string | 服务用途 |
+| `algorithm_name` | string | 明确抽取的单个算法名称，可用于自动创建 `USES_ALGORITHM` |
+| `algorithm_names` | list<string> | 明确抽取的算法名称列表，可用于自动创建 `USES_ALGORITHM` |
 
 ## CryptoApplication
 
@@ -287,6 +299,8 @@
 | `scenario` | string | 应用场景 |
 | `description` | string | 具体描述 |
 | `mechanism` | string | 技术机制 |
+| `algorithm_name` | string | 明确抽取的单个算法名称，可用于自动创建 `USES_ALGORITHM` |
+| `algorithm_names` | list<string> | 明确抽取的算法名称列表，可用于自动创建 `USES_ALGORITHM` |
 | `frequency` | string | 校验或执行频率 |
 | `compliance_statement` | string | 合规性说明 |
 

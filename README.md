@@ -123,7 +123,7 @@ docker exec -i crypto-neo4j cypher-shell -u "$NEO4J_USERNAME" -p "$NEO4J_PASSWOR
 docker exec -i crypto-neo4j cypher-shell -u "$NEO4J_USERNAME" -p "$NEO4J_PASSWORD" < ontology/link_instances.cypher
 ```
 
-`link_instances.cypher` 只根据明确的 ID 引用创建关系，可重复执行。算法、威胁、保护对象等语义关系必须由报告内容或人工确认提供，脚本不会按标签猜测关联。
+`link_instances.cypher` 只根据明确字段或 ID 引用创建关系，可重复执行。脚本支持从 `algorithm_name` / `algorithm_names`、`business_application_id` / `business_application_ids`、`server_id` / `server_ids`、`database_system_id` / `database_system_ids` / `database_id` / `database_ids` 自动创建已定义关系；不会按名称、描述或存储位置模糊猜测关联。`未明确`、`未提供`、`XX`、`N/A`、`NA`、`无` 和空值不会创建正常业务关系。
 
 写入一套脱敏的实际业务形态测评数据：
 
@@ -132,6 +132,80 @@ scripts/load_sample_data.sh
 ```
 
 该脚本依次应用 schema、全局字典、`ontology/sample_evaluation_data.cypher` 和实例自动关联脚本，可重复执行。样例包含一个政务服务平台，以及资产、密码产品、密码应用、重要数据、威胁、测评项、发现和证据。
+
+执行缺失字段检测，并把数据质量问题写回为 `Finding`：
+
+```bash
+chmod +x scripts/detect_missing_fields.sh
+scripts/detect_missing_fields.sh
+```
+
+Windows 环境建议在 Git Bash 中执行上述脚本；如果在 PowerShell 中运行，可使用：
+
+```powershell
+& "C:\Program Files\Git\bin\bash.exe" scripts/detect_missing_fields.sh
+```
+
+也可以直接执行 Cypher：
+
+```bash
+source .env
+docker exec -i crypto-neo4j cypher-shell -u "$NEO4J_USERNAME" -p "$NEO4J_PASSWORD" < ontology/detect_missing_fields.cypher
+```
+
+缺失字段检测会检查关键字段是否为空、空列表或占位值，并保留原始值；检测结果写入已有报告模型：`Report -[:HAS_FINDING]-> Finding`、`ComplianceItem -[:HAS_FINDING]-> Finding`、`Finding -[:SUPPORTED_BY]-> Evidence`。Finding 使用稳定 ID，可重复执行，不会生成重复问题记录。
+
+### 验收查询
+
+规则生成的算法关系：
+
+```cypher
+MATCH (n)-[:USES_ALGORITHM]->(algorithm:CryptoAlgorithm)
+WHERE n:CryptoProduct OR n:CryptoApplication OR n:CryptoService
+RETURN labels(n) AS labels, n.name AS source, collect(algorithm.name) AS algorithms
+ORDER BY source;
+```
+
+规则生成的数据归属和存储关系：
+
+```cypher
+MATCH (data:ImportantData)
+OPTIONAL MATCH (data)-[:BELONGS_TO]->(app:BusinessApplication)
+OPTIONAL MATCH (data)-[:STORED_ON]->(server:Server)
+OPTIONAL MATCH (data)-[:STORED_IN]->(database:DatabaseSystem)
+RETURN data.name AS data,
+       collect(DISTINCT app.name) AS applications,
+       collect(DISTINCT server.name) AS servers,
+       collect(DISTINCT database.name) AS databases
+ORDER BY data;
+```
+
+某个报告下的数据质量 Finding：
+
+```cypher
+MATCH (report:Report {id: "rpt_20260610_gov_service"})-[:HAS_FINDING]->(finding:Finding)
+WHERE finding.finding_type = "数据质量问题"
+RETURN finding.target_node_id AS node_id,
+       finding.target_field AS field,
+       finding.original_value AS original_value,
+       finding.description AS description
+ORDER BY node_id, field;
+```
+
+重复执行后的关系和 Finding 去重检查：
+
+```cypher
+MATCH (a)-[r]->(b)
+WHERE type(r) IN ["USES_ALGORITHM", "BELONGS_TO", "STORED_ON", "STORED_IN"]
+WITH elementId(a) AS start_id, type(r) AS relationship_type, elementId(b) AS end_id, count(*) AS count
+WHERE count > 1
+RETURN start_id, relationship_type, end_id, count;
+
+MATCH (finding:Finding {finding_type: "数据质量问题"})
+WITH finding.id AS id, count(*) AS count
+WHERE count > 1
+RETURN id, count;
+```
 
 ## Neo4j 本地部署
 
@@ -184,3 +258,49 @@ NEO4J_BOLT_PORT=7687
 ```
 
 非本地环境请修改 `NEO4J_PASSWORD`。
+
+## 图谱查询 API
+
+本仓库提供一个轻量 FastAPI 服务，用于把 Neo4j 图谱内容以稳定 JSON 返回给后续 report 智能体。
+
+### 安装依赖
+
+```bash
+uv sync --extra test
+```
+
+### 启动 API
+
+先启动 Neo4j 并加载样例数据：
+
+```bash
+sudo scripts/neo4j.sh up
+sudo scripts/load_sample_data.sh
+```
+
+再启动查询服务：
+
+```bash
+uv run uvicorn crypto_kg_api.main:app --host 0.0.0.0 --port 8000
+```
+
+默认读取以下环境变量，未设置时使用本地 Neo4j 默认值：
+
+```text
+NEO4J_URI=bolt://localhost:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=crypto_neo4j_password
+NEO4J_DATABASE=neo4j
+```
+
+### 常用接口
+
+```bash
+curl http://localhost:8000/api/v1/health
+curl http://localhost:8000/api/v1/ready
+curl http://localhost:8000/api/v1/systems/sys_gov_service/overview
+curl http://localhost:8000/api/v1/systems/sys_gov_service/assets
+curl http://localhost:8000/api/v1/reports/rpt_20260610_gov_service/generation-context
+```
+
+`generation-context` 是后续接入 report 智能体的主接口，只返回图中已有事实，不根据名称或文本猜测缺失关系。

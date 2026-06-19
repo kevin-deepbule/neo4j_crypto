@@ -1,0 +1,604 @@
+{
+  "system_id": "gov-service-platform",
+  "records": [
+    {
+      "schema_id": "CryptoProductSchema",
+      "entity_type": "CryptoProduct",
+      "source_ref": {
+        "section": "2.4.3",
+        "table_name": "密码产品清单",
+        "row_index": 1,
+        "column_name": null,
+        "source_text": "{'密码产品名称': '签名验签服务器', '产品类型': '服务器密码机', '厂商': '某密码厂商', '型号': 'SVS-1000', '密码算法': 'SM2、SM3', '部署位置': '核心区'}"
+      },
+      "fields": {
+        "name": "签名验签服务器",
+        "product_type": "服务器密码机",
+        "vendor": "某密码厂商",
+        "model": "SVS-1000",
+        "algorithms": [
+          "SM2",
+          "SM3"
+        ],
+        "deployment_location": "核心区"
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "CryptoProductSchema",
+      "entity_type": "CryptoProduct",
+      "source_ref": {
+        "section": "2.4.3",
+        "table_name": "密码产品清单",
+        "row_index": 2,
+        "column_name": null,
+        "source_text": "{'密码产品名称': 'SM2', '产品类型': '服务器密码机', '厂商': '某密码厂商'}"
+      },
+      "fields": {
+        "name": "SM2",
+        "product_type": "服务器密码机",
+        "vendor": "某密码厂商"
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "ServerDeviceSchema",
+      "entity_type": "ServerDevice",
+      "source_ref": {
+        "section": "2.2.1",
+        "table_name": "服务器设备清单",
+        "row_index": 1,
+        "column_name": null,
+        "source_text": "{'服务器名称': '数据库服务器01', 'IP地址': '10.0.1.15', '操作系统': 'Linux', '部署位置': '核心区'}"
+      },
+      "fields": {
+        "name": "数据库服务器01",
+        "ip_address": "10.0.1.15",
+        "os": "Linux",
+        "deployment_location": "核心区"
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "DataAssetSchema",
+      "entity_type": "DataAsset",
+      "source_ref": {
+        "section": "2.3.1",
+        "table_name": "重要数据清单",
+        "row_index": 1,
+        "column_name": null,
+        "source_text": "{'数据名称': '用户身份信息', '数据类别': '个人信息', '存储服务器': '数据库服务器01', '保护需求': '机密性、完整性'}"
+      },
+      "fields": {
+        "name": "用户身份信息",
+        "data_category": "个人信息",
+        "stored_on": "数据库服务器01",
+        "protection_requirement": [
+          "机密性",
+          "完整性"
+        ]
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "CryptoApplicationSchema",
+      "entity_type": "CryptoApplication",
+      "source_ref": {
+        "section": "3.1.1",
+        "table_name": "密码应用情况",
+        "row_index": 1,
+        "column_name": null,
+        "source_text": "{'密码应用名称': '用户登录身份鉴别', '密码用途': '身份鉴别', '使用产品': '签名验签服务器', '保护对象': '用户身份信息', '使用算法': 'SM2'}"
+      },
+      "fields": {
+        "name": "用户登录身份鉴别",
+        "usage": "身份鉴别",
+        "product_name": "签名验签服务器",
+        "data_asset": "用户身份信息",
+        "algorithms": [
+          "SM2"
+        ]
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "PersonSchema",
+      "entity_type": "Person",
+      "source_ref": {
+        "section": "2.1.2",
+        "table_name": "人员清单",
+        "row_index": 1,
+        "column_name": null,
+        "source_text": "{'姓名': '张三', '部门': '安全管理部', '角色': '系统管理员', '电话': '13800000000'}"
+      },
+      "fields": {
+        "name": "张三",
+        "department": "安全管理部",
+        "role": "系统管理员",
+        "phone": "13800000000"
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "schema_id": "PersonSchema",
+      "entity_type": "Person",
+      "source_ref": {
+        "section": "2.1.2",
+        "table_name": "人员清单",
+        "row_index": 2,
+        "column_name": null,
+        "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+      },
+      "fields": {
+        "name": "张三",
+        "department": "运维部 13800000000",
+        "role": "系统管理员"
+      },
+      "missing_fields": [],
+      "quality_flags": [],
+      "confidence": 1.0
+    }
+  ],
+  "entities": [
+    {
+      "id": "govserviceplatform:crypto_product:签名验签服务器",
+      "labels": [
+        "Entity",
+        "CryptoProduct"
+      ],
+      "primary_label": "CryptoProduct",
+      "name": "签名验签服务器",
+      "properties": {
+        "product_type": "服务器密码机",
+        "vendor": "某密码厂商",
+        "model": "SVS-1000",
+        "algorithms": [
+          "SM2",
+          "SM3"
+        ],
+        "deployment_location": "核心区",
+        "system_id": "gov-service-platform",
+        "name": "签名验签服务器",
+        "source_section": "2.4.3",
+        "confidence": 1.0
+      },
+      "source_refs": [
+        {
+          "section": "2.4.3",
+          "table_name": "密码产品清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码产品名称': '签名验签服务器', '产品类型': '服务器密码机', '厂商': '某密码厂商', '型号': 'SVS-1000', '密码算法': 'SM2、SM3', '部署位置': '核心区'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "govserviceplatform:crypto_product:sm2",
+      "labels": [
+        "Entity",
+        "CryptoProduct"
+      ],
+      "primary_label": "CryptoProduct",
+      "name": "SM2",
+      "properties": {
+        "product_type": "服务器密码机",
+        "vendor": "某密码厂商",
+        "system_id": "gov-service-platform",
+        "name": "SM2",
+        "source_section": "2.4.3",
+        "confidence": 1.0
+      },
+      "source_refs": [
+        {
+          "section": "2.4.3",
+          "table_name": "密码产品清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'密码产品名称': 'SM2', '产品类型': '服务器密码机', '厂商': '某密码厂商'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "govserviceplatform:server_device:数据库服务器01",
+      "labels": [
+        "Entity",
+        "ServerDevice"
+      ],
+      "primary_label": "ServerDevice",
+      "name": "数据库服务器01",
+      "properties": {
+        "ip_address": "10.0.1.15",
+        "os": "Linux",
+        "deployment_location": "核心区",
+        "system_id": "gov-service-platform",
+        "name": "数据库服务器01",
+        "source_section": "2.2.1",
+        "confidence": 1.0
+      },
+      "source_refs": [
+        {
+          "section": "2.2.1",
+          "table_name": "服务器设备清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'服务器名称': '数据库服务器01', 'IP地址': '10.0.1.15', '操作系统': 'Linux', '部署位置': '核心区'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "govserviceplatform:data_asset:用户身份信息",
+      "labels": [
+        "Entity",
+        "DataAsset"
+      ],
+      "primary_label": "DataAsset",
+      "name": "用户身份信息",
+      "properties": {
+        "data_category": "个人信息",
+        "stored_on": "数据库服务器01",
+        "protection_requirement": [
+          "机密性",
+          "完整性"
+        ],
+        "system_id": "gov-service-platform",
+        "name": "用户身份信息",
+        "source_section": "2.3.1",
+        "confidence": 1.0
+      },
+      "source_refs": [
+        {
+          "section": "2.3.1",
+          "table_name": "重要数据清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'数据名称': '用户身份信息', '数据类别': '个人信息', '存储服务器': '数据库服务器01', '保护需求': '机密性、完整性'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "govserviceplatform:crypto_application:用户登录身份鉴别",
+      "labels": [
+        "Entity",
+        "CryptoApplication"
+      ],
+      "primary_label": "CryptoApplication",
+      "name": "用户登录身份鉴别",
+      "properties": {
+        "usage": "身份鉴别",
+        "product_name": "签名验签服务器",
+        "data_asset": "用户身份信息",
+        "algorithms": [
+          "SM2"
+        ],
+        "system_id": "gov-service-platform",
+        "name": "用户登录身份鉴别",
+        "source_section": "3.1.1",
+        "confidence": 1.0
+      },
+      "source_refs": [
+        {
+          "section": "3.1.1",
+          "table_name": "密码应用情况",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码应用名称': '用户登录身份鉴别', '密码用途': '身份鉴别', '使用产品': '签名验签服务器', '保护对象': '用户身份信息', '使用算法': 'SM2'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    },
+    {
+      "id": "govserviceplatform:person:张三",
+      "labels": [
+        "Entity",
+        "Person"
+      ],
+      "primary_label": "Person",
+      "name": "张三",
+      "properties": {
+        "department": "安全管理部",
+        "role": "系统管理员",
+        "phone": "13800000000",
+        "system_id": "gov-service-platform",
+        "name": "张三",
+        "source_section": "2.1.2",
+        "confidence": 1.0,
+        "_conflict_department": [
+          "运维部 13800000000"
+        ]
+      },
+      "source_refs": [
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '安全管理部', '角色': '系统管理员', '电话': '13800000000'}"
+        },
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+        }
+      ],
+      "quality_flags": [],
+      "confidence": 1.0
+    }
+  ],
+  "relationships": [
+    {
+      "start_id": "govserviceplatform:crypto_product:签名验签服务器",
+      "rel_type": "USES_ALGORITHM",
+      "end_id": null,
+      "end_lookup": {
+        "label": "CryptoAlgorithm",
+        "key": "name",
+        "value": "SM2"
+      },
+      "properties": {
+        "source_section": "2.4.3"
+      },
+      "source_refs": [
+        {
+          "section": "2.4.3",
+          "table_name": "密码产品清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码产品名称': '签名验签服务器', '产品类型': '服务器密码机', '厂商': '某密码厂商', '型号': 'SVS-1000', '密码算法': 'SM2、SM3', '部署位置': '核心区'}"
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "start_id": "govserviceplatform:crypto_product:签名验签服务器",
+      "rel_type": "USES_ALGORITHM",
+      "end_id": null,
+      "end_lookup": {
+        "label": "CryptoAlgorithm",
+        "key": "name",
+        "value": "SM3"
+      },
+      "properties": {
+        "source_section": "2.4.3"
+      },
+      "source_refs": [
+        {
+          "section": "2.4.3",
+          "table_name": "密码产品清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码产品名称': '签名验签服务器', '产品类型': '服务器密码机', '厂商': '某密码厂商', '型号': 'SVS-1000', '密码算法': 'SM2、SM3', '部署位置': '核心区'}"
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "start_id": "govserviceplatform:data_asset:用户身份信息",
+      "rel_type": "STORED_ON",
+      "end_id": "govserviceplatform:server_device:数据库服务器01",
+      "end_lookup": null,
+      "properties": {
+        "source_section": "2.3.1"
+      },
+      "source_refs": [
+        {
+          "section": "2.3.1",
+          "table_name": "重要数据清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'数据名称': '用户身份信息', '数据类别': '个人信息', '存储服务器': '数据库服务器01', '保护需求': '机密性、完整性'}"
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "start_id": "govserviceplatform:crypto_application:用户登录身份鉴别",
+      "rel_type": "USES_PRODUCT",
+      "end_id": "govserviceplatform:crypto_product:签名验签服务器",
+      "end_lookup": null,
+      "properties": {
+        "source_section": "3.1.1"
+      },
+      "source_refs": [
+        {
+          "section": "3.1.1",
+          "table_name": "密码应用情况",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码应用名称': '用户登录身份鉴别', '密码用途': '身份鉴别', '使用产品': '签名验签服务器', '保护对象': '用户身份信息', '使用算法': 'SM2'}"
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "start_id": "govserviceplatform:crypto_application:用户登录身份鉴别",
+      "rel_type": "PROTECTS_DATA",
+      "end_id": "govserviceplatform:data_asset:用户身份信息",
+      "end_lookup": null,
+      "properties": {
+        "source_section": "3.1.1"
+      },
+      "source_refs": [
+        {
+          "section": "3.1.1",
+          "table_name": "密码应用情况",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码应用名称': '用户登录身份鉴别', '密码用途': '身份鉴别', '使用产品': '签名验签服务器', '保护对象': '用户身份信息', '使用算法': 'SM2'}"
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "start_id": "govserviceplatform:crypto_application:用户登录身份鉴别",
+      "rel_type": "USES_ALGORITHM",
+      "end_id": null,
+      "end_lookup": {
+        "label": "CryptoAlgorithm",
+        "key": "name",
+        "value": "SM2"
+      },
+      "properties": {
+        "source_section": "3.1.1"
+      },
+      "source_refs": [
+        {
+          "section": "3.1.1",
+          "table_name": "密码应用情况",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'密码应用名称': '用户登录身份鉴别', '密码用途': '身份鉴别', '使用产品': '签名验签服务器', '保护对象': '用户身份信息', '使用算法': 'SM2'}"
+        }
+      ],
+      "confidence": 1.0
+    }
+  ],
+  "issues": [
+    {
+      "issue_type": "field_misalignment",
+      "severity": "error",
+      "message": "产品名称疑似填写成了算法名称",
+      "entity_id": null,
+      "field_name": "name",
+      "source_refs": [
+        {
+          "section": "2.4.3",
+          "table_name": "密码产品清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'密码产品名称': 'SM2', '产品类型': '服务器密码机', '厂商': '某密码厂商'}"
+        }
+      ],
+      "detail": {
+        "value": "SM2",
+        "schema_id": "CryptoProductSchema"
+      }
+    },
+    {
+      "issue_type": "field_misalignment",
+      "severity": "error",
+      "message": "手机号/电话疑似落入错误字段",
+      "entity_id": null,
+      "field_name": "department",
+      "source_refs": [
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+        }
+      ],
+      "detail": {
+        "value": "运维部 13800000000",
+        "schema_id": "PersonSchema"
+      }
+    },
+    {
+      "issue_type": "field_misalignment",
+      "severity": "error",
+      "message": "部门字段疑似包含联系方式或地址",
+      "entity_id": null,
+      "field_name": "department",
+      "source_refs": [
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+        }
+      ],
+      "detail": {
+        "value": "运维部 13800000000",
+        "schema_id": "PersonSchema"
+      }
+    },
+    {
+      "issue_type": "same_person_field_conflict",
+      "severity": "error",
+      "message": "同名人员字段 department 存在不一致取值：['安全管理部', '运维部 13800000000']",
+      "entity_id": "govserviceplatform:person:张三",
+      "field_name": "department",
+      "source_refs": [
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '安全管理部', '角色': '系统管理员', '电话': '13800000000'}"
+        },
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+        }
+      ],
+      "detail": {
+        "values": [
+          "安全管理部",
+          "运维部 13800000000"
+        ]
+      }
+    },
+    {
+      "issue_type": "entity_property_conflict",
+      "severity": "error",
+      "message": "实体 张三 的字段 department 存在多个冲突取值",
+      "entity_id": "govserviceplatform:person:张三",
+      "field_name": "department",
+      "source_refs": [
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 1,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '安全管理部', '角色': '系统管理员', '电话': '13800000000'}"
+        },
+        {
+          "section": "2.1.2",
+          "table_name": "人员清单",
+          "row_index": 2,
+          "column_name": null,
+          "source_text": "{'姓名': '张三', '部门': '运维部 13800000000', '角色': '系统管理员'}"
+        }
+      ],
+      "detail": {
+        "values": [
+          "安全管理部",
+          "运维部 13800000000"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "record_count": 7,
+    "entity_count": 6,
+    "relationship_count": 6,
+    "issue_count": 5
+  }
+}

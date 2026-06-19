@@ -136,6 +136,10 @@ finding_id          -> SUPPORTED_BY
 product_type_code   -> HAS_PRODUCT_TYPE
 data_category_code  -> HAS_DATA_CATEGORY
 criterion_code      -> BASED_ON
+algorithm_name(s)   -> USES_ALGORITHM
+business_application_id(s) -> BELONGS_TO
+server_id(s)        -> STORED_ON
+database_system_id(s) / database_id(s) -> STORED_IN
 ```
 
 以下关系必须来自报告原文、结构化导入映射或人工确认，不能只按标签批量连接：
@@ -149,3 +153,9 @@ PROTECTS_DATA / PROTECTS_ASSET / PROVIDES_SERVICE
 HAS_THREAT / AFFECTS_ASSET / AFFECTS_DATA / MITIGATED_BY / RELATED_TO_REQUIREMENT
 REGULATES / RESPONSIBLE_FOR / MANAGES / OPERATES
 ```
+
+当上述关系由 `link_instances.cypher` 自动创建时，必须满足以下边界：
+
+- 只使用明确字段或本地 ID，不按名称、描述、存储位置等文本模糊猜测。
+- 单值字段优先遵循已有命名，例如 `server_id`、`database_system_id`、`business_application_id`；多值场景可兼容 `server_ids`、`database_system_ids`、`business_application_ids`。
+- `未明确`、`未提供`、`XX`、`N/A`、`NA`、`无`、空字符串和空列表不创建正常业务关系，应由数据质量检测形成 `Finding`。
